@@ -4,16 +4,33 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 
-public class ArenaList extends ActionBarActivity {
+public class ArenaList extends ActionBarActivity implements CompoundButton.OnCheckedChangeListener{
 
+    private ListView arenaListView;
+
+    private static final String[] strs = new String[] {
+        "first", "second", "third", "fourth", "fifth"
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arena_list);
-    }
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+
+        arenaListView = (ListView) findViewById(R.id.arenaListView);
+        arenaListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_selectable_list_item, strs));
+
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -35,5 +52,22 @@ public class ArenaList extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked)
+        {
+            switch (buttonView.getId())
+            {
+                case R.id.radio_button0:
+                    // switch page
+                    break;
+                case R.id.radio_button1:
+                    break;
+                case R.id.radio_button2:
+                    break;
+            }
+        }
     }
 }
