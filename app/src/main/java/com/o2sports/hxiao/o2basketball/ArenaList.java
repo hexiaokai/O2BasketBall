@@ -22,8 +22,8 @@ public class ArenaList extends ActionBarActivity implements CompoundButton.OnChe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_arena_list);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 
         arenaListView = (ListView) findViewById(R.id.arenaListView);
