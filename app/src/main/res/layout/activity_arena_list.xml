@@ -32,6 +32,12 @@
         android:layout_alignParentEnd="true"
         android:background="#ffffffff" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Refresh"
+        android:id="@+id/refreshButton" />
+
     <TabHost android:id="@android:id/tabhost" android:layout_width="fill_parent" android:layout_height="fill_parent"
         xmlns:android="http://schemas.android.com/apk/res/android">
         <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
@@ -40,9 +46,11 @@
                 <ListView
                     android:layout_width="wrap_content"
                     android:layout_height="416dp"
-                    android:id="@+id/arenaListView"
+                    android:id="@+id/arena_list_view"
                     android:layout_gravity="center"
                     android:choiceMode="singleChoice" />
+
+
             </FrameLayout>
             <TabWidget android:id="@android:id/tabs" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="0.0" />
             <RadioGroup
