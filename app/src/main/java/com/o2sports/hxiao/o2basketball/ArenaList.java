@@ -44,8 +44,8 @@ public class ArenaList extends ActionBarActivity implements CompoundButton.OnChe
         mAdapter = new PlayerListAdapter(this, R.id.arena_list_view);
 
         arenaListView = (ListView) findViewById(R.id.arena_list_view);
-        //arenaListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_selectable_list_item, strs));
-        arenaListView.setAdapter(mAdapter);
+        arenaListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_selectable_list_item, strs));
+        //arenaListView.setAdapter(mAdapter);
 
         refreshButton = (Button) findViewById(R.id.refreshButton);
         refreshButton.setOnClickListener(this);
@@ -93,6 +93,7 @@ public class ArenaList extends ActionBarActivity implements CompoundButton.OnChe
     }
 
     public void onClick(View view) {
+        arenaListView.setAdapter(mAdapter);
         if (view == refreshButton) {
             try {
                 mClient = new MobileServiceClient(
@@ -130,6 +131,7 @@ public class ArenaList extends ActionBarActivity implements CompoundButton.OnChe
                 public void onCompleted(List<Player> players, int i, Exception e, ServiceFilterResponse serviceFilterResponse) {
                     if (e == null) {
                         Log.i("Tag", "Total item count " + i);
+                        mAdapter.clear();
                         if (!players.isEmpty()) {
                             for (Player p : players) {
                                 Log.i("Tag", "Read object with ID " + p.id + p.name + p.capability + p.position);
