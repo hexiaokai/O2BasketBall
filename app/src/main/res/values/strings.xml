@@ -8,5 +8,6 @@
     <string name="main_games">比赛</string>
     <string name="main_profile">我</string>
     <string name="main_media">长暂停</string>
+    <string name="title_activity_arena_detail">ArenaDetail</string>
 
 </resources>
