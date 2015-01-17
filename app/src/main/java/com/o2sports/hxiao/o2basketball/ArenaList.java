@@ -24,31 +24,37 @@ import java.util.jar.JarEntry;
 
 public class ArenaList extends ActionBarActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener{
 
+    public MobileServiceClient mClient;
+
     private ListView arenaListView;
-    private MobileServiceClient mClient;
-    private MobileServiceTable<Player> mPlayer;
-    private List<Player> playerList;
-    private Button refreshButton;
 
-    private PlayerListAdapter mAdapter;
+    private MobileServiceTable<Arena> mArenaTable;
+    private List<Arena> arenaList;
+    private ArenaListAdapter mArenaAdapter;
 
-    private static final String[] strs = new String[] {
-        "first", "second", "third", "fourth", "fifth"
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_arena_list);
 
-        mAdapter = new PlayerListAdapter(this, R.id.arena_list_view);
-
         arenaListView = (ListView) findViewById(R.id.arena_list_view);
-        arenaListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_selectable_list_item, strs));
-        //arenaListView.setAdapter(mAdapter);
 
-        refreshButton = (Button) findViewById(R.id.refreshButton);
-        refreshButton.setOnClickListener(this);
+        try {
+            mClient = new MobileServiceClient(
+                    "https://o2service.azure-mobile.net/",
+                    "qJNqJihCYMDTfwYsbHbfURxaOfUNwh32",
+                    this
+            );
+        }
+        catch (Exception e)
+        {
+
+        }
+
+        mArenaAdapter = new ArenaListAdapter(this, R.id.arena_list_view);
+        arenaListView.setAdapter(mArenaAdapter);
+
+        refreshArenaList();
 
 
     }
@@ -81,76 +87,42 @@ public class ArenaList extends ActionBarActivity implements CompoundButton.OnChe
         {
             switch (buttonView.getId())
             {
-                case R.id.radio_button0:
-                    // switch page
-                    break;
-                case R.id.radio_button1:
-                    break;
-                case R.id.radio_button2:
-                    break;
+                //
             }
         }
     }
 
-    public void onClick(View view) {
-        arenaListView.setAdapter(mAdapter);
-        if (view == refreshButton) {
-            try {
-                mClient = new MobileServiceClient(
-                        "https://o2service.azure-mobile.net/",
-                        "WOOlrIveEONQVxwUzgDGjXDOtPVSxs92",
-                        this
-                );
-                mPlayer = mClient.getTable(Player.class);
-            }
-            catch (Exception e)
-            {
+    public void refreshArenaList()
+    {
+        mArenaTable = mClient.getTable(Arena.class);
 
-            }
-
-            playerList = new ArrayList<Player>();
-            final ArrayList<String> playerNames = new ArrayList<String>();
-
-            /* Write Table Test Pass
-            Player newPlayer = new Player();
-            newPlayer.ID = "123";
-            newPlayer.Name = "456";
-            newPlayer.Position = 3;
-            newPlayer.Capacity = 70;
-            mClient.getTable(Player.class).insert(newPlayer, new TableOperationCallback<Player>() {
-                public void onCompleted(Player entity, Exception exception, ServiceFilterResponse response) {
-                    //
-                }
-            });
-            */
-
-            //Log.i("Tag", mClient.getTable(Player.class).where().field("Name").eq("1").getQueryText());
-
-            mPlayer.execute(new TableQueryCallback<Player>() {
-                @Override
-                public void onCompleted(List<Player> players, int i, Exception e, ServiceFilterResponse serviceFilterResponse) {
-                    if (e == null) {
-                        Log.i("Tag", "Total item count " + i);
-                        mAdapter.clear();
-                        if (!players.isEmpty()) {
-                            for (Player p : players) {
-                                Log.i("Tag", "Read object with ID " + p.id + p.name + p.capability + p.position);
-                                //playerList.add(p);
-                                mAdapter.add(p);
-                            }
-                        } else {
-                            Log.i("Tag", "No Player");
+        mArenaTable.execute(new TableQueryCallback<Arena>() {
+            @Override
+            public void onCompleted(List<Arena> arenas, int i, Exception e, ServiceFilterResponse serviceFilterResponse) {
+                if (e == null) {
+                    Log.i("Tag", "Total item count " + i);
+                    mArenaAdapter.clear();
+                    if (!arenas.isEmpty()) {
+                        for (Arena arena : arenas) {
+                            Log.i("Tag", "Read object with ID " + arena.id + arena.name);
+                            mArenaAdapter.add(arena);
                         }
                     } else {
-                        createAndShowDialog(e.toString(), "Error");
+                        Log.i("Tag", "No Arena");
                     }
+                } else {
+                    Log.e("Tag", e.toString());
+                    createAndShowDialog(e.toString(), "Error");
                 }
-            });
+            }
+        });
+    }
 
-
-            //arenaListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_selectable_list_item, playerNames));
-            //arenaListView.refreshDrawableState();
-        }
+    public void onClick(View view) {
+        Arena sArena = (Arena) view.getTag();
+        Intent mIntent = new Intent(ArenaList.this, ArenaDetail.class);
+        mIntent.putExtra("ArenaID", sArena.id);
+        startActivity(mIntent);
     }
 
     private void createAndShowDialog(String message, String title)

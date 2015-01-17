@@ -1,17 +1,33 @@
 package com.o2sports.hxiao.o2basketball;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 
 public class ArenaDetail extends ActionBarActivity {
+
+    public Arena currentArena;
+    public TextView arenaID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arena_detail);
+
+
+        currentArena = new Arena();
+
+        Intent intent = getIntent();
+
+        currentArena.id = intent.getStringExtra("ArenaID");
+
+        arenaID = (TextView) findViewById(R.id.regCountText);
+        arenaID.setText(currentArena.id);
+
     }
 
 
