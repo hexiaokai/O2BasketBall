@@ -22,6 +22,10 @@
             android:name=".ArenaDetail"
             android:label="@string/title_activity_arena_detail" >
         </activity>
+        <activity
+            android:name=".PlayerProfile"
+            android:label="@string/title_activity_player_profile" >
+        </activity>
     </application>
 
 </manifest>
